@@ -5,21 +5,41 @@
     </body>
     <script src ="https://unpkg.com/react@17.0.2/umd/react.production.min.js"></script>
     <script src ="https://unpkg.com/react-dom@17.0.2/umd/react-dom.production.min.js"></script>
+    <script src ="https://unpkg.com/prop-types@15.7.2/prop-types.js"></script>
     <script src ="https://unpkg.com/@babel/standalone/babel.min.js"></script>
     <script type="text/babel">
+        function Btn({ text, onClick, fontSize = 16}){
+            console.log(text,"was rerend");
+        
+            return (
+                <button
+                    onClick={onClick}
+                    style={{
+                        backgroundColor: "tomato",
+                        Color: "white",
+                        padding:"10px 20px",
+                        border: 0,
+                        borderRadius: 10,
+                        fontSize,
+                    }}
+                >
+                    {text}
+                </button>
+            );
+        }
+        const MemorizedBtn = React.memo(Btn);
+        Btn.propTypes = {
+            text:PropTypes.string.isRequired,
+            fontSize:PropTypes.number,
+        };
         function App () {
-            const [minutes, setMinutes] = React.useState();
-            const onChange = (event) => {
-                setMinutes(event.target.value);
-            };
+            const [value, setValue] = React.useState("Save Changes");
+            const changeValue = () => setValue("Revert Changes");
             return(
                 <div>
-                    <h1 className="hi">Super Converter</h1>
-                    <label htmlFor ="minutes">Minutes</label> 
-                    <input value={minutes} id ="minutes" placeholder="Minutes" type="number" onChange ={onChange}/>
-                    <h4>You want to convert{minutes}</h4>
-                    <label htmlFor ="hours">hours</label> 
-                    <input id="hours" placeholder="Hours" type="number"/>
+                    <MemorizedBtn text={value} onClick={changeValue} />
+                    <MemorizedBtn text="Continue"/>
+                    <Btn text={"Continue"} fontSize={18}/>
                 </div>
             );
         }
